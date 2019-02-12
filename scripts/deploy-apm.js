@@ -61,7 +61,7 @@ module.exports = async (
     ens = (await deployENS(null, { artifacts, owner, verbose: false })).ens
     ensAddress = ens.address
   } else {
-    ens = ENS.at(ensAddress)
+    ens = await ENS.at(ensAddress)
   }
 
   log('ENS:', ensAddress)
@@ -80,7 +80,7 @@ module.exports = async (
 
   let daoFactory
   if (daoFactoryAddress) {
-    daoFactory = DAOFactory.at(daoFactoryAddress)
+    daoFactory = await DAOFactory.at(daoFactoryAddress)
     const hasEVMScripts = await daoFactory.regFactory() !== ZERO_ADDR
 
     log(`Using provided DAOFactory (with${hasEVMScripts ? '' : 'out' } EVMScripts):`, daoFactoryAddress)
@@ -96,7 +96,7 @@ module.exports = async (
     apmRepoBase.address,
     ensSubdomainRegistrarBase.address,
     ensAddress,
-    '0x00'
+    '0x0000000000000000000000000000000000000000'
   )
   await logDeploy(apmFactory, { verbose })
 
@@ -135,7 +135,7 @@ module.exports = async (
     return {
       apmFactory,
       ens,
-      apm: APMRegistry.at(apmAddr),
+      apm: await APMRegistry.at(apmAddr),
     }
   }
 }

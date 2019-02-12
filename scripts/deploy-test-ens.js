@@ -44,7 +44,7 @@ module.exports = async (
     truffleExecCallback()
   } else {
     return {
-      ens: ENS.at(ensAddr),
+      ens: await ENS.at(ensAddr),
       ensFactory: factory,
     }
   }
