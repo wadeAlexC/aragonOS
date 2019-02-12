@@ -72,7 +72,7 @@ contract PublicResolver {
      * @param node The ENS node to query.
      * @return The associated address.
      */
-    function addr(bytes32 node) public constant returns (address ret) {
+    function addr(bytes32 node) public view returns (address ret) {
         ret = records[node].addr;
     }
 
@@ -94,7 +94,7 @@ contract PublicResolver {
      * @param node The ENS node to query.
      * @return The associated content hash.
      */
-    function content(bytes32 node) public constant returns (bytes32 ret) {
+    function content(bytes32 node) public view returns (bytes32 ret) {
         ret = records[node].content;
     }
 
@@ -117,7 +117,7 @@ contract PublicResolver {
      * @param node The ENS node to query.
      * @return The associated name.
      */
-    function name(bytes32 node) public constant returns (string ret) {
+    function name(bytes32 node) public view returns (string memory ret) {
         ret = records[node].name;
     }
 
@@ -127,7 +127,7 @@ contract PublicResolver {
      * @param node The node to update.
      * @param name The name to set.
      */
-    function setName(bytes32 node, string name) only_owner(node) public {
+    function setName(bytes32 node, string memory name) only_owner(node) public {
         records[node].name = name;
         NameChanged(node, name);
     }
@@ -140,7 +140,7 @@ contract PublicResolver {
      * @return contentType The content type of the return value
      * @return data The ABI data
      */
-    function ABI(bytes32 node, uint256 contentTypes) public constant returns (uint256 contentType, bytes data) {
+    function ABI(bytes32 node, uint256 contentTypes) public view returns (uint256 contentType, bytes memory data) {
         var record = records[node];
         for(contentType = 1; contentType <= contentTypes; contentType <<= 1) {
             if ((contentType & contentTypes) != 0 && record.abis[contentType].length > 0) {
@@ -159,7 +159,7 @@ contract PublicResolver {
      * @param contentType The content type of the ABI
      * @param data The ABI data.
      */
-    function setABI(bytes32 node, uint256 contentType, bytes data) only_owner(node) public {
+    function setABI(bytes32 node, uint256 contentType, bytes memory data) only_owner(node) public {
         // Content types must be powers of 2
         if (((contentType - 1) & contentType) != 0) throw;
 
@@ -173,7 +173,7 @@ contract PublicResolver {
      * @param node The ENS node to query
      * @return x, y the X and Y coordinates of the curve point for the public key.
      */
-    function pubkey(bytes32 node) public constant returns (bytes32 x, bytes32 y) {
+    function pubkey(bytes32 node) public view returns (bytes32 x, bytes32 y) {
         return (records[node].pubkey.x, records[node].pubkey.y);
     }
 
@@ -194,7 +194,7 @@ contract PublicResolver {
      * @param key The text data key to query.
      * @return The associated text data.
      */
-    function text(bytes32 node, string key) public constant returns (string ret) {
+    function text(bytes32 node, string memory key) public view returns (string memory ret) {
         ret = records[node].text[key];
     }
 
@@ -205,7 +205,7 @@ contract PublicResolver {
      * @param key The key to set.
      * @param value The text data value to set.
      */
-    function setText(bytes32 node, string key, string value) only_owner(node) public {
+    function setText(bytes32 node, string memory key, string memory value) only_owner(node) public {
         records[node].text[key] = value;
         TextChanged(node, key, key);
     }

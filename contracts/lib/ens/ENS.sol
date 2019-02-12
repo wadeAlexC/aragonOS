@@ -31,21 +31,21 @@ contract ENS is AbstractENS {
     /**
      * Returns the address that owns the specified node.
      */
-    function owner(bytes32 node) public constant returns (address) {
+    function owner(bytes32 node) public view returns (address) {
         return records[node].owner;
     }
 
     /**
      * Returns the address of the resolver for the specified node.
      */
-    function resolver(bytes32 node) public constant returns (address) {
+    function resolver(bytes32 node) public view returns (address) {
         return records[node].resolver;
     }
 
     /**
      * Returns the TTL of a node, and any records associated with it.
      */
-    function ttl(bytes32 node) public constant returns (uint64) {
+    function ttl(bytes32 node) public view returns (uint64) {
         return records[node].ttl;
     }
 
