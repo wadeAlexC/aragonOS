@@ -27,7 +27,7 @@ const linkLib = async (contract, libName) => {
 
   const prefix = underscores(PREFIX_UNDERSCORES)
   const suffix = underscores(ADDR_LENGTH - PREFIX_UNDERSCORES - libName.length)
-  
+
   const libPlaceholder = `${prefix}${libName}${suffix}`
 
   const lib = await artifacts.require(libName).new()
