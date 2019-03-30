@@ -11,7 +11,8 @@ import "./IVaultRecoverable.sol";
 import "./SafeERC20.sol";
 
 
-contract VaultRecoverable is IVaultRecoverable, EtherTokenConstant, IsContract {
+contract VaultRecoverable is IVaultRecoverable, EtherTokenConstant {
+    using IsContract for address;
     using SafeERC20 for ERC20;
 
     string private constant ERROR_DISALLOWED = "RECOVER_DISALLOWED";
@@ -26,7 +27,7 @@ contract VaultRecoverable is IVaultRecoverable, EtherTokenConstant, IsContract {
     function transferToVault(address _token) external {
         require(allowRecoverability(_token), ERROR_DISALLOWED);
         address vault = getRecoveryVault();
-        require(isContract(vault), ERROR_VAULT_NOT_CONTRACT);
+        require(vault.isContract(), ERROR_VAULT_NOT_CONTRACT);
 
         uint256 balance;
         if (_token == ETH) {

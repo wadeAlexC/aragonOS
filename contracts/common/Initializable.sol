@@ -8,7 +8,7 @@ import "./UnstructuredStorage.sol";
 import "../common/TimeHelpers.sol";
 
 
-contract Initializable is TimeHelpers {
+contract Initializable {
     using UnstructuredStorage for bytes32;
 
     // keccak256("aragonOS.initializable.initializationBlock")
@@ -39,14 +39,14 @@ contract Initializable is TimeHelpers {
     */
     function hasInitialized() public view returns (bool) {
         uint256 initializationBlock = getInitializationBlock();
-        return initializationBlock != 0 && getBlockNumber() >= initializationBlock;
+        return initializationBlock != 0 && TimeHelpers.getBlockNumber() >= initializationBlock;
     }
 
     /**
     * @dev Function to be called by top level contract after initialization has finished.
     */
     function initialized() internal onlyInit {
-        INITIALIZATION_BLOCK_POSITION.setStorageUint256(getBlockNumber());
+        INITIALIZATION_BLOCK_POSITION.setStorageUint256(TimeHelpers.getBlockNumber());
     }
 
     /**

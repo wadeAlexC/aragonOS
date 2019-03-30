@@ -16,7 +16,7 @@ import "../acl/ACLSyntaxSugar.sol";
 // Unless overriden, this behaviour enforces those contracts to be usable only behind an AppProxy.
 // ACLSyntaxSugar and EVMScriptRunner are not directly used by this contract, but are included so
 // that they are automatically usable by subclassing contracts
-contract AragonApp is AppStorage, Autopetrified, VaultRecoverable, EVMScriptRunner, ACLSyntaxSugar {
+contract AragonApp is AppStorage, Autopetrified, VaultRecoverable, EVMScriptRunner {
     string private constant ERROR_AUTH_FAILED = "APP_AUTH_FAILED";
 
     modifier auth(bytes32 _role) {

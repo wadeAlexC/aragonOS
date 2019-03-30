@@ -5,7 +5,7 @@
 pragma solidity ^0.4.24;
 
 
-contract IsContract {
+library IsContract {
     /*
     * NOTE: this should NEVER be used for authentication
     * (see pitfalls: https://github.com/fergarrui/ethereum-security/tree/master/contracts/extcodesize).

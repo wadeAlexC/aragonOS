@@ -7,7 +7,7 @@ pragma solidity ^0.4.24;
 import "./Uint256Helpers.sol";
 
 
-contract TimeHelpers {
+library TimeHelpers {
     using Uint256Helpers for uint256;
 
     /**

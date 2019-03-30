@@ -9,7 +9,10 @@ import "./IACLOracle.sol";
 
 /* solium-disable function-order */
 // Allow public initialize() to be first
-contract ACL is IACL, TimeHelpers, AragonApp, ACLHelpers {
+contract ACL is IACL, AragonApp {
+
+    using ACLHelpers for uint;
+
     /* Hardcoded constants to save gas
     bytes32 public constant CREATE_PERMISSIONS_ROLE = keccak256("CREATE_PERMISSIONS_ROLE");
     */
@@ -318,7 +321,7 @@ contract ACL is IACL, TimeHelpers, AragonApp, ACLHelpers {
         if (params.length == 0) { // params not saved before
             for (uint256 i = 0; i < _encodedParams.length; i++) {
                 uint256 encodedParam = _encodedParams[i];
-                Param memory param = Param(decodeParamId(encodedParam), decodeParamOp(encodedParam), uint240(encodedParam));
+                Param memory param = Param(encodedParam.decodeParamId(), encodedParam.decodeParamOp(), uint240(encodedParam));
                 params.push(param);
             }
         }
@@ -353,9 +356,9 @@ contract ACL is IACL, TimeHelpers, AragonApp, ACLHelpers {
             value = checkOracle(IACLOracle(param.value), _who, _where, _what, _how) ? 1 : 0;
             comparedTo = 1;
         } else if (param.id == BLOCK_NUMBER_PARAM_ID) {
-            value = getBlockNumber();
+            value = TimeHelpers.getBlockNumber();
         } else if (param.id == TIMESTAMP_PARAM_ID) {
-            value = getTimestamp();
+            value = TimeHelpers.getTimestamp();
         } else if (param.id == PARAM_VALUE_PARAM_ID) {
             value = uint256(param.value);
         } else {
@@ -382,7 +385,7 @@ contract ACL is IACL, TimeHelpers, AragonApp, ACLHelpers {
             uint32 successParam;
             uint32 failureParam;
 
-            (conditionParam, successParam, failureParam) = decodeParamsList(uint256(_param.value));
+            (conditionParam, successParam, failureParam) = uint256(_param.value).decodeParamsList();
             bool result = _evalParam(_paramsHash, conditionParam, _who, _where, _what, _how);
 
             return _evalParam(_paramsHash, result ? successParam : failureParam, _who, _where, _what, _how);
@@ -391,7 +394,7 @@ contract ACL is IACL, TimeHelpers, AragonApp, ACLHelpers {
         uint32 param1;
         uint32 param2;
 
-        (param1, param2,) = decodeParamsList(uint256(_param.value));
+        (param1, param2,) = uint256(_param.value).decodeParamsList();
         bool r1 = _evalParam(_paramsHash, param1, _who, _where, _what, _how);
 
         if (Op(_param.op) == Op.NOT) {

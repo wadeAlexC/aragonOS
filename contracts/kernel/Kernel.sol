@@ -13,7 +13,9 @@ import "../factory/AppProxyFactory.sol";
 
 
 // solium-disable-next-line max-len
-contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstants, Petrifiable, IsContract, VaultRecoverable, AppProxyFactory, ACLSyntaxSugar {
+contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstants, Petrifiable, VaultRecoverable, AppProxyFactory {
+    using IsContract for address;
+
     /* Hardcoded constants to save gas
     bytes32 public constant APP_MANAGER_ROLE = keccak256("APP_MANAGER_ROLE");
     */
@@ -62,7 +64,7 @@ contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstant
     */
     function newAppInstance(bytes32 _appId, address _appBase)
         public
-        auth(APP_MANAGER_ROLE, arr(KERNEL_APP_BASES_NAMESPACE, _appId))
+        auth(APP_MANAGER_ROLE, ACLSyntaxSugar.arr(KERNEL_APP_BASES_NAMESPACE, _appId))
         returns (ERCProxy appProxy)
     {
         return newAppInstance(_appId, _appBase, new bytes(0), false);
@@ -82,7 +84,7 @@ contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstant
     */
     function newAppInstance(bytes32 _appId, address _appBase, bytes _initializePayload, bool _setDefault)
         public
-        auth(APP_MANAGER_ROLE, arr(KERNEL_APP_BASES_NAMESPACE, _appId))
+        auth(APP_MANAGER_ROLE, ACLSyntaxSugar.arr(KERNEL_APP_BASES_NAMESPACE, _appId))
         returns (ERCProxy appProxy)
     {
         _setAppIfNew(KERNEL_APP_BASES_NAMESPACE, _appId, _appBase);
@@ -103,7 +105,7 @@ contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstant
     */
     function newPinnedAppInstance(bytes32 _appId, address _appBase)
         public
-        auth(APP_MANAGER_ROLE, arr(KERNEL_APP_BASES_NAMESPACE, _appId))
+        auth(APP_MANAGER_ROLE, ACLSyntaxSugar.arr(KERNEL_APP_BASES_NAMESPACE, _appId))
         returns (ERCProxy appProxy)
     {
         return newPinnedAppInstance(_appId, _appBase, new bytes(0), false);
@@ -123,7 +125,7 @@ contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstant
     */
     function newPinnedAppInstance(bytes32 _appId, address _appBase, bytes _initializePayload, bool _setDefault)
         public
-        auth(APP_MANAGER_ROLE, arr(KERNEL_APP_BASES_NAMESPACE, _appId))
+        auth(APP_MANAGER_ROLE, ACLSyntaxSugar.arr(KERNEL_APP_BASES_NAMESPACE, _appId))
         returns (ERCProxy appProxy)
     {
         _setAppIfNew(KERNEL_APP_BASES_NAMESPACE, _appId, _appBase);
@@ -145,7 +147,7 @@ contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstant
     */
     function setApp(bytes32 _namespace, bytes32 _appId, address _app)
         public
-        auth(APP_MANAGER_ROLE, arr(_namespace, _appId))
+        auth(APP_MANAGER_ROLE, ACLSyntaxSugar.arr(_namespace, _appId))
     {
         _setApp(_namespace, _appId, _app);
     }
@@ -156,7 +158,7 @@ contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstant
     */
     function setRecoveryVaultAppId(bytes32 _recoveryVaultAppId)
         public
-        auth(APP_MANAGER_ROLE, arr(KERNEL_APP_ADDR_NAMESPACE, _recoveryVaultAppId))
+        auth(APP_MANAGER_ROLE, ACLSyntaxSugar.arr(KERNEL_APP_ADDR_NAMESPACE, _recoveryVaultAppId))
     {
         recoveryVaultAppId = _recoveryVaultAppId;
     }
@@ -212,7 +214,7 @@ contract Kernel is IKernel, KernelStorage, KernelAppIds, KernelNamespaceConstant
     }
 
     function _setApp(bytes32 _namespace, bytes32 _appId, address _app) internal {
-        require(isContract(_app), ERROR_APP_NOT_CONTRACT);
+        require(_app.isContract(), ERROR_APP_NOT_CONTRACT);
         apps[_namespace][_appId] = _app;
         emit SetApp(_namespace, _appId, _app);
     }

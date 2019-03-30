@@ -7,14 +7,15 @@ import "../common/DepositableDelegateProxy.sol";
 import "../common/IsContract.sol";
 
 
-contract KernelProxy is IKernelEvents, KernelStorage, KernelAppIds, KernelNamespaceConstants, IsContract, DepositableDelegateProxy {
+contract KernelProxy is IKernelEvents, KernelStorage, KernelAppIds, KernelNamespaceConstants, DepositableDelegateProxy {
+    using IsContract for address;
     /**
     * @dev KernelProxy is a proxy contract to a kernel implementation. The implementation
     *      can update the reference, which effectively upgrades the contract
     * @param _kernelImpl Address of the contract used as implementation for kernel
     */
     constructor(IKernel _kernelImpl) public {
-        require(isContract(address(_kernelImpl)));
+        require(address(_kernelImpl).isContract());
         apps[KERNEL_CORE_NAMESPACE][KERNEL_CORE_APP_ID] = _kernelImpl;
 
         // Note that emitting this event is important for verifying that a KernelProxy instance

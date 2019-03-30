@@ -5,7 +5,7 @@
 pragma solidity ^0.4.24;
 
 
-contract ACLSyntaxSugar {
+library ACLSyntaxSugar {
     function arr() internal pure returns (uint256[]) {
         // solium-disable-previous-line no-empty-blocks
     }
@@ -87,7 +87,7 @@ contract ACLSyntaxSugar {
 }
 
 
-contract ACLHelpers {
+library ACLHelpers {
     function decodeParamOp(uint256 _x) internal pure returns (uint8 b) {
         return uint8(_x >> (8 * 30));
     }
