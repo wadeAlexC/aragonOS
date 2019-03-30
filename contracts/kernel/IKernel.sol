@@ -8,7 +8,7 @@ import "../acl/IACL.sol";
 import "../common/IVaultRecoverable.sol";
 
 
-interface IKernelEvents {
+contract IKernelEvents {
     event SetApp(bytes32 indexed namespace, bytes32 indexed appId, address app);
 }
 

@@ -15,7 +15,7 @@ contract EVMScriptRegistryConstants {
 }
 
 
-interface IEVMScriptRegistry {
+contract IEVMScriptRegistry {
     function addScriptExecutor(IEVMScriptExecutor executor) external returns (uint id);
     function disableScriptExecutor(uint256 executorId) external;
 

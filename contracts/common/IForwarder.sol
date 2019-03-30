@@ -5,7 +5,7 @@
 pragma solidity ^0.4.24;
 
 
-interface IForwarder {
+contract IForwarder {
     function isForwarder() external pure returns (bool);
 
     // TODO: this should be external

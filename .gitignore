@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+bin/
 
 # Lock files
 package-lock.json
